@@ -1,40 +1,79 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sheets 图表展示</title>
-  <style>
-    /* 简单的样式 */
-    .chart-container {
-      width: 100%;
-      height: 500px;
-      border: 1px solid #ccc;
-      margin-top: 20px;
-    }
-  </style>
+    <title>MWI指数</title>
+    <style>
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-frame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+        
+        .chart-frame.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-  <h1>Google Sheets 图表展示</h1>
-  
-  <!-- 按钮区域 -->
-  <button onclick="loadChart('https://docs.google.com/spreadsheets/d/e/2PACX-1vR8TO7b3aThwQt9aWBOPJl1H5xsUGFvH5R795cegtpsm7AgTbEfHdo7-MZIFyzq0IeP3fgGHYJGNpfH/pubchart?oid=1223334857&format=interactive')">
-    图表1
-  </button>
-  <button onclick="loadChart('https://另一个图表链接')">
-    图表2
-  </button>
-  <!-- 根据需要添加更多按钮 -->
+    <div class="button-container"></div>
+    <div id="chart-container"></div>
 
-  <!-- 图表展示区域 -->
-  <div class="chart-container">
-    <iframe id="chartFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
-  </div>
+    <script>
+        const charts = [
+            {
+                id: 'chart1',
+                label: '生产利润指数',
+                url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR8TO7b3aThwQt9aWBOPJl1H5xsUGFvH5R795cegtpsm7AgTbEfHdo7-MZIFyzq0IeP3fgGHYJGNpfH/pubchart?oid=1223334857&format=interactive'
+            },
+            {
+                id: 'chart2',
+                label: '战斗预期收入曲线：初期',
+                url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQXH5Ue1CKMnUgrGv3BCGYCV-Ph_vNaLGwaUFW8vmi9F-8Qsob9tsPPvw0LtLCxC_oyR8gWNSHxLXfT/pubchart?oid=1277384535&format=interactive'
+            },
+            {
+                id: 'chart3',
+                label: '战斗预期收入曲线：中期',
+                url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQXH5Ue1CKMnUgrGv3BCGYCV-Ph_vNaLGwaUFW8vmi9F-8Qsob9tsPPvw0LtLCxC_oyR8gWNSHxLXfT/pubchart?oid=640771370&format=interactive'
+            },
+            {
+                id: 'chart4',
+                label: '战斗预期收入曲线：后期',
+                url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQXH5Ue1CKMnUgrGv3BCGYCV-Ph_vNaLGwaUFW8vmi9F-8Qsob9tsPPvw0LtLCxC_oyR8gWNSHxLXfT/pubchart?oid=731731374&format=interactive'
+            }
+        ];
 
-  <script>
-    function loadChart(url) {
-      document.getElementById('chartFrame').src = url;
-    }
-  </script>
+        const buttonContainer = document.querySelector('.button-container');
+        const chartContainer = document.getElementById('chart-container');
+
+        charts.forEach((chart) => {
+            const btn = document.createElement('button');
+            btn.textContent = chart.label;
+            btn.addEventListener('click', () => switchChart(chart.id));
+            
+            const iframe = document.createElement('iframe');
+            iframe.className = 'chart-frame';
+            iframe.id = chart.id;
+            iframe.src = chart.url;
+
+            buttonContainer.appendChild(btn);
+            chartContainer.appendChild(iframe);
+        });
+
+        document.getElementById(charts[0].id).classList.add('active');
+
+        function switchChart(chartId) {
+            document.querySelectorAll('.chart-frame').forEach(frame => {
+                frame.classList.remove('active');
+            });
+            document.getElementById(chartId).classList.add('active');
+        }
+    </script>
 </body>
 </html>
